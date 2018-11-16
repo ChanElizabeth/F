@@ -1,6 +1,5 @@
 from pygame import *
 from pygame.sprite import *
-from objects.button import Button
 
 class Arrow(Sprite):
     def __init__(self, screen, type, x,y, width, height, speed):
@@ -12,7 +11,10 @@ class Arrow(Sprite):
         self.width = width
         self.height = height
         self.speed = speed
-        if self.type == 1:
+        if self.type == 0:
+            self.image = pygame.Surface((10, 10))
+            self.rect = self.image.get_rect()
+        elif self.type == 1:
             self.image = pygame.image.load("images/Leftarrow.bmp")
             self.rect = pygame.draw.rect(screen, (0, 0, 0), (60,475, 210, 575))
         elif self.type == 2:
@@ -28,12 +30,13 @@ class Arrow(Sprite):
 
     def update(self):
         self.y -= self.speed
+        # Update the rect position.
+        self.rect.y = self.y
 
+'''
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-
-'''
     def collision(self):
         k = pygame.key.get_pressed()
         if k[pygame.K_UP]:

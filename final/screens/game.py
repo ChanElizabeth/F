@@ -17,103 +17,106 @@ def game(Button, Statarrow, gameOver, level):
         upA = Statarrow("images/arrowup.bmp")
         rightA = Statarrow("images/arrowright.bmp")
 
-        gameBg = pygame.image.load("images/bg.gif")
+        gameBg = pygame.image.load("images/Gbg.png")
         gameBg = pygame.transform.scale(gameBg, (800, 600))
-        #gameBg = DanceBg("images/bg.gif")
 
-        #initialize the coordinate of the background
-        #x = 0
-        #y = 0
-        # x1 = gameBg.width
-        # y1 = 0
         pygame.init()
 
         gameClock = pygame.time.Clock()
 
-        arrow1 = arw.Arrow(screen, 1, 60, 475, 150, 100, 8)
-        arrow2 = arw.Arrow(screen, 2, 225, 475, 150, 100, 8)
-        arrow3 = arw.Arrow(screen, 3, 425, 475, 150, 100, 8)
-        arrow4 = arw.Arrow(screen, 4, 600, 475, 150, 100, 8)
+        arrow1_group = pygame.sprite.LayeredUpdates()
+        arrow2_group = pygame.sprite.LayeredUpdates()
+        arrow3_group = pygame.sprite.LayeredUpdates()
+        arrow4_group = pygame.sprite.LayeredUpdates()
 
-        arrow1_group = pygame.sprite.LayerUpdates()
-        arrow2_group = pygame.sprite.LayerUpdates()
-        arrow3_group = pygame.sprite.LayerUpdates()
-        arrow4_group = pygame.sprite.LayerUpdates()
+        timer = 0
+        musictimer = 0
+        i = 1
 
-        #tickRate = 40
-        #arrow_group = pygame.time.get_ticks()
-        time = 0
+        music_play = False
+
         while True:
-            #game phase goes faster after every frame
-            #gameClock.tick(tickRate)
-            #ickRate += 0.01
-             #change the coordinate of the bg_Image, and draws the background
-            # x -= 5
-            # x1 -= 5
-            # gameBg.draw(screen, x, y)
-            # gameBg.draw(screen, x1, y1)
-            # if x < -gameBg.width:
-            #     x = 0
-            # if x1 < 0:
-            #     x1 = gameBg.width
-            time+= 0.05
-            laRect = pygame.draw.rect(screen, (0, 0, 0), (60,75, 210, 175))
-            daRect = pygame.draw.rect(screen, (0, 0, 0), (225, 75, 375, 175))
-            uaRect = pygame.draw.rect(screen, (0, 0, 0), (425, 75, 575, 175))
-            raRect = pygame.draw.rect(screen, (0, 0, 0), (600, 75, 750, 175))
+
             screen.blit(gameBg, (0, 0))
-            lefA = screen.blit(leftA.statarrow, (60, 75))
-            dowA = screen.blit(downA.statarrow, (225, 75))
-            uA = screen.blit(upA.statarrow, (425, 75))
-            rigA = screen.blit(rightA.statarrow, (600, 75))
+            lefA = screen.blit(leftA.image, (60, 75))
+            dowA = screen.blit(downA.image, (225, 75))
+            uA = screen.blit(upA.image, (425, 75))
+            rigA = screen.blit(rightA.image, (600, 75))
 
-            for i in map.getSecs():
-                keysattime = map.getKeys(i)
-                #k = pygame.key.get_pressed()
-                if keysattime[0]:
-                    arrow1_group.LayeredUpdates.add(arrow1)
-                if keysattime[1]:
-                    arrow2_group.LayeredUpdates.add(arrow2)
+            if not music_play:
+                try:
+                    pygame.mixer.music.load("sound/BOOMBAYAH.mp3")
+                    pygame.mixer.music.play()
+                    music_play = True
+                except IndexError:
+                    pygame.mixer.music.stop()
+                    music_play = False
 
-                if keysattime[2]:
-                    arrow3_group.LayeredUpdates.add(arrow3)
 
-                if keysattime[3]:
-                    arrow4_group.LayeredUpdates.add(arrow4)
+            #musictimer += 0.09
+            #if musictimer > 0.45:
+            #     pygame.mixer.music.stop()
 
-            print(arrow1_group)
+            timer += 0.09
+            if timer > 1:
+                try:
+                    keysattime = map.getKeys(i)
+                    if keysattime[0] == '0':
+                        arrow0 = arw.Arrow(screen, 0, 0, 0, 150, 100, 8)
+                        arrow1_group.add(arrow0)
+                    if keysattime[0] == '1':
+                        arrow1 = arw.Arrow(screen, 1, 60, 475, 150, 100, 8)
+                        arrow1_group.add(arrow1)
 
-            for arrow1 in arrow1_group:
-                if arrow1 == "1":
-                #arrow1_group.draw(screen)
-                    arrow1_group.LayerUpdates.draw(screen)
-            for arrow2 in arrow2_group:
-                if arrow2 == "1":
-                #arrow2_group.draw(screen)
-                    arrow2_group.LayerUpdates.draw(screen)
+                    if keysattime[1] == '0':
+                        arrow0 = arw.Arrow(screen, 0, 0, 0, 150, 100, 8)
+                        arrow2_group.add(arrow0)
+                    if keysattime[1] == '1':
+                        arrow2 = arw.Arrow(screen, 2, 225, 475, 150, 100, 8)
+                        arrow2_group.add(arrow2)
 
-            for arrow3 in arrow3_group:
-                if arrow3 == "1":
-                #arrow3_group.draw(screen)
-                    arrow3_group.LayerUpdates.draw(screen)
+                    if keysattime[2] == '0':
+                        arrow0 = arw.Arrow(screen, 0, 0, 0, 150, 100, 8)
+                        arrow3_group.add(arrow0)
+                    if keysattime[2] == '1':
+                        arrow3 = arw.Arrow(screen,3, 425, 475, 150, 100, 8)
+                        arrow3_group.add(arrow3)
 
-            for arrow4 in arrow4_group:
-                if arrow4 == "1":
-                #arrow4_group.draw(screen)
-                    arrow4_group.LayerUpdates.draw(screen)
+                    if keysattime[3] == '0':
+                        arrow0 = arw.Arrow(screen, 0, 0, 0, 150, 100, 8)
+                        arrow4_group.add(arrow0)
+                    if keysattime[3] == '1':
+                        arrow4 = arw.Arrow(screen, 4, 600, 475, 150, 100, 8)
+                        arrow4_group.add(arrow4)
+                    i += 1
+                    timer = 0
+                except IndexError:
+                    pygame.mixer.music.stop()
 
-            ev = pygame.event.wait()
+            arrow1_group.update()
+            arrow1_group.draw(screen)
 
-            if ev.type == pygame.QUIT:
-                sys.exit()
+            arrow2_group.update()
+            arrow2_group.draw(screen)
+
+            arrow3_group.update()
+            arrow3_group.draw(screen)
+
+            arrow4_group.update()
+            arrow4_group.draw(screen)
+
+            for ev in pygame.event.get():
+                if ev.type == pygame.QUIT:
+                    sys.exit()
+
+                elif ev.type == pygame.KEYDOWN:
+                    if (ev.key == pygame.K_LEFT):
+                        pygame.sprite.spritecollide(leftA, arrow1_group, dokill = True)
+                    elif (ev.key == pygame.K_DOWN):
+                        pygame.sprite.spritecollide(downA, arrow2_group, dokill = True)
+                    elif (ev.key == pygame.K_UP):
+                        pygame.sprite.spritecollide(upA, arrow3_group, dokill = True)
+                    elif (ev.key == pygame.K_RIGHT):
+                        pygame.sprite.spritecollide(rightA, arrow4_group, dokill = True)
 
             pygame.display.update()
-            gameClock.tick(50)
-'''
-
-
-    if level == "medium":
-        print("f")
-    if level == "hard":
-        print("phello")
-'''
